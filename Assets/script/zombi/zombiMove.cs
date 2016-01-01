@@ -6,6 +6,7 @@ public class zombiMove : MonoBehaviour
     private Animator anim;
     private Rigidbody rbody;
     private ZombiAction zAction;
+    private ZombiManager zManager;
 
     public float walkSpeed;
     public GameObject player;
@@ -15,12 +16,23 @@ public class zombiMove : MonoBehaviour
 
     public float attackRange;
 
+    public enum State
+    {
+        Idel,
+        Move,
+        Attack,
+        Hit,
+        Die
+    };
+
+
     // Use this for initialization
     void Start()
     {
         anim = GetComponent<Animator>();
         rbody = GetComponent<Rigidbody>();
         zAction = GetComponent<ZombiAction>();
+        zManager = GetComponent<ZombiManager>();
 
         attackRange = 2.7f;
     }
@@ -28,7 +40,8 @@ public class zombiMove : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        //Debug.Log((int)iStudentState) );   // int 형으로 형변환 -> 결과 : 0 이 출력
+        //Debug.Log(((iStudentState)3).ToString()); // int 형을 enum으로 형변환 -> 결과 : eGoToSchool 이 출력
     }
 
     private void FixedUpdate()
@@ -37,8 +50,9 @@ public class zombiMove : MonoBehaviour
         Vector3 offsetPos = this.transform.position - player.transform.position;
         offsetPos.y = 0;
 
+        State isZombieState = State.Idel;
 
-        if (offsetPos.magnitude > attackRange)
+        if (offsetPos.magnitude > attackRange && isZombieState == State.Idel )
         {
             
             anim.SetBool("isWalk", true);
