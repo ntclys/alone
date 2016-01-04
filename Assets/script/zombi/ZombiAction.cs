@@ -5,41 +5,53 @@ public class ZombiAction : MonoBehaviour {
 
     private ZombiManager zManager;
     private Animator anim;
-    private Rigidbody rbody;
     private Collider col;
+    private zombiMove zMove;
 
-    bool isZombiHit = false;
+    private bool isZombiHit = false;
 
+
+    public bool Hited
+    {
+        get { return isZombiHit; }
+        set { isZombiHit = value; }
+    }
     // Use this for initialization
-    void Start () {
+    void Start ()
+    {
         anim = GetComponent<Animator>();
-        rbody = GetComponent<Rigidbody>();
         zManager = GetComponent<ZombiManager>();
         col = GetComponent<Collider>();
+        zMove = GetComponent<zombiMove>();
     }
 	
 	// Update is called once per frame
-	void Update () {
+	void Update ()
+    {
 	
 	}
 
+    private void FixedUpdate()
+    {
+
+    }
+
     public void attackPlayer(bool isAttack)
     {
-        if (isZombiHit != false)
+        if (isZombiHit == false)
         {
             anim.SetBool("isZombiAttack", isAttack);
         }
-        
     }
 
     void OnTriggerEnter(Collider Get)
     {
         if(Get.gameObject.tag =="Weapon")
         {
-
+           // Debug.Log("hit");
             isZombiHit = true;
+            zMove.Worked = true;
             damageCheck();
-
         }
     }
 
@@ -50,14 +62,20 @@ public class ZombiAction : MonoBehaviour {
 
         if(zManager.helthPoint > 0)
         {
-            Debug.Log("hit");
             anim.SetBool("isZombiAttack", false);
             anim.SetBool("hit", true);
         }
         else
         {
+            Debug.Log(zMove.Died);
+            zMove.Died = true;
+            anim.SetBool("isZombiAttack", false);
+            anim.SetBool("die", true);
+
+            //yield return new WaitForSeconds(1.0f);
+
             col.isTrigger = true;
-           // Destroy(this.gameObject);
+            // Destroy(this.gameObject);
         }
     }
 }

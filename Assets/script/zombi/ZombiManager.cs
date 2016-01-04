@@ -6,18 +6,25 @@ public class ZombiManager : MonoBehaviour {
     public int helthPoint = 100;
     public int attackPoint =  1;
 
-    
+    /*
     public enum State
     {
-        Idel,
+        Idel = 0,
         Move,
         Attack,
         Hit,
         Die
     };
 
-    public State zombieState = State.Idel;
+    private State zombieState = State.Idel;
 
+    public State CurrentZombiState
+    {
+        get { return zombieState; }
+        set { zombieState = value; }
+    }
+    */
+   
 	// Use this for initialization
 	void Start () {
 	

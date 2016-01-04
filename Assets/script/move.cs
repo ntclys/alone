@@ -11,7 +11,6 @@ public class move : MonoBehaviour {
 
     private Vector3 moveDeirection = Vector3.zero;
     private CharacterController crController;
-    private bool isGraounded = false;
 
     public float walkSpeed = 8.0f;
     public float jumpSpeed = 3.5f;
@@ -80,9 +79,8 @@ public class move : MonoBehaviour {
         {
             if (attackMoveOnece == true)
             {
-                //Debug.Log("test:" + Time.deltaTime);
-                Invoke("playerAttackMoveOnce", 0.2f);
-
+                //Invoke("playerAttackMoveOnce", 0.2f);
+   
                 attackMoveOnece = false;
 
                // Debug.Log("pos" + moveDeirection);
