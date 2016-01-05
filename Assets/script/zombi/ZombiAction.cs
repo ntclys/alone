@@ -9,14 +9,6 @@ public class ZombiAction : MonoBehaviour {
     private zombiMove zMove;
     private Rigidbody rbody;
 
-    private bool isZombiHit = false;
-
-
-    public bool Hited
-    {
-        get { return isZombiHit; }
-        set { isZombiHit = value; }
-    }
     // Use this for initialization
     void Start ()
     {
@@ -40,34 +32,32 @@ public class ZombiAction : MonoBehaviour {
 
     public void attackPlayer(bool isAttack)
     {
-        if (isZombiHit == false)
+        if (zMove.Worked == false)
         {
             anim.SetBool("isZombiAttack", isAttack);
         }
     }
-    /*
+    
     void OnTriggerEnter(Collider Get)
     {
         if(Get.gameObject.tag =="Weapon")
         {
-           // Debug.Log("hit");
-            isZombiHit = true;
+            //Debug.Log("hit");
+            zMove.Worked = true;
+            damageCheck();
+        }
+    }
+   /*
+    void OnCollisionEnter(Collision other)
+    {
+        if (other.gameObject.tag == "Weapon")
+        {
+             Debug.Log("hit");
             zMove.Worked = true;
             damageCheck();
         }
     }
     */
-    void OnCollisionEnter(Collision other)
-    {
-        if (other.gameObject.tag == "Weapon")
-        {
-            // Debug.Log("hit");
-            isZombiHit = true;
-            zMove.Worked = true;
-            damageCheck();
-        }
-    }
-
 
     void damageCheck()
     {
@@ -75,21 +65,29 @@ public class ZombiAction : MonoBehaviour {
 
         if(zManager.helthPoint > 0)
         {
-            anim.SetBool("isZombiAttack", false);
-            anim.SetBool("hit", true);
+            //Debug.Log("hit");
+            //anim.StopPlayback();
+            //anim.SetBool("hit", true);
+           // anim.SetBool("isZombiAttack", false);
+            anim.SetTrigger("Hit");
         }
         else
         {
             //Debug.Log(zMove.Died);
-            zMove.Died = true;
-            anim.SetBool("isZombiAttack", false);
-            anim.SetBool("die", true);
+            if (zMove.Died == false)
+            {
+                zMove.Died = true;
+                //anim.SetBool("isZombiAttack", false);
+                //anim.SetBool("die", true);
+                anim.SetTrigger("Die");
 
-            rbody.isKinematic = true;   //고정후 충돌 안하게
-            col.isTrigger = true;
+                rbody.isKinematic = true;   //좀비 다이시 고정후 캐릭터와 충돌 안하게
+                col.isTrigger = true;
 
-            //yield return new WaitForSeconds(1.0f);
-            Invoke("zombieDie", 3.0f);
+                //yield return new WaitForSeconds(1.0f);
+                Invoke("zombieDie", 3.0f);
+            }
+            
         }
     }
 

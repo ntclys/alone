@@ -5,7 +5,10 @@ using System.Collections;
 public class move : MonoBehaviour {
 
     public Animator anim;
+    private AnimatorStateInfo currentPlayereAni;
     public Rigidbody rbody;
+    public GameObject playerWeapon;
+    private Collider playerWeaponCol;
 
     public Transform target;
 
@@ -35,6 +38,7 @@ public class move : MonoBehaviour {
         crController = GetComponent<CharacterController>();
         anim = GetComponent<Animator>();
         rbody = GetComponent<Rigidbody>();
+        playerWeaponCol = playerWeapon.GetComponent<Collider>();
 
         isAttackChk = false;
         attackMoveOnece = false;
@@ -42,12 +46,16 @@ public class move : MonoBehaviour {
 
     private void Update()
     {
-        if (Input.GetMouseButton(0) && isAttackChk == false)
+        currentPlayereAni = anim.GetCurrentAnimatorStateInfo(0);
+
+        if (Input.GetMouseButtonDown(0) && currentPlayereAni.IsName("Attack") == false)
         {
             isAttackChk = true;
             attackMoveOnece = true;
+            anim.SetTrigger("Attack");
             anim.SetBool("isRun", false);
-            anim.SetBool("isAttack", true);
+            playerWeaponCol.enabled = true;
+
             //Invoke("endAttackAni", 0.1f);  //일정시간후 관련함수 호출
         }
     }
@@ -57,7 +65,7 @@ public class move : MonoBehaviour {
 
         //Debug.Log("test:" + Input.GetAxis("Horizontal"));
 
-        if (isAttackChk == false)
+        if ( currentPlayereAni.IsName("Attack") == false)
         {
             moveDeirection = new Vector3(0, 0, Input.GetAxis("Vertical"));
             transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y + Input.GetAxis("Horizontal") * turnSpeed, transform.eulerAngles.z);
@@ -77,6 +85,14 @@ public class move : MonoBehaviour {
         }
         else
         {
+            currentPlayereAni = anim.GetCurrentAnimatorStateInfo(0);
+
+            if (currentPlayereAni.normalizedTime > 0.5f)
+            {
+                playerWeaponCol.enabled = false;
+            }
+  
+
             if (attackMoveOnece == true)
             {
                 //Invoke("playerAttackMoveOnce", 0.2f);
@@ -128,9 +144,12 @@ public class move : MonoBehaviour {
         this.transform.position += transform.forward * 1.2f;
     }
 
+    /*
+    //애니메이션 프레임에서 이벤트 호출 함수
     public void aniParameterFalse(string clip)
     {
         anim.SetBool(clip, false);
         isAttackChk = false;
     }
+    */
 }

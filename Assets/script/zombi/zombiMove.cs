@@ -65,7 +65,6 @@ public class zombiMove : MonoBehaviour
                         isWork = false;
                         anim.SetBool("hit", false);
                         zAction.attackPlayer(false);
-                        zAction.Hited = false;
                     }
                 }
                 else if (currentZombieAni.IsName("attack"))
