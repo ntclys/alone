@@ -13,7 +13,7 @@ public class zombiMove : MonoBehaviour
     public GameObject player;
 
     private Vector3 movement;
-    private bool isWork = false;
+    [SerializeField] private bool isWork = false;
     private bool isDie = false;
 
     public float attackRange;
@@ -74,6 +74,10 @@ public class zombiMove : MonoBehaviour
                     {
                         isWork = false;
                     }
+                }
+                else if(currentZombieAni.IsName("Walk") ) //활성화 상태인데 걷기모션중일 경우
+                {
+                    isWork = false;
                 }
             }
 
