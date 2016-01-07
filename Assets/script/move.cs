@@ -4,24 +4,26 @@ using System.Collections;
 
 public class move : MonoBehaviour {
 
-    public Animator anim;
+    private Animator anim;
     private AnimatorStateInfo currentPlayereAni;
-    public Rigidbody rbody;
-    public GameObject playerWeapon;
+    private Rigidbody rbody;
     private Collider playerWeaponCol;
 
     public Transform target;
+    public GameObject playerWeapon;
 
     private Vector3 moveDeirection = Vector3.zero;
     private CharacterController crController;
 
     public float walkSpeed = 8.0f;
-    public float jumpSpeed = 3.5f;
+    public float jumpPower = 3.5f;
     public float turnSpeed = 10.0f;
     public float gravity = 10.0f;
 
     private bool isAttackChk;
     private bool attackMoveOnece;
+
+    private bool m_Jump;
 
     private float inputH;
     private float inputV;
@@ -57,6 +59,11 @@ public class move : MonoBehaviour {
             playerWeaponCol.enabled = true;
 
             //Invoke("endAttackAni", 0.1f);  //일정시간후 관련함수 호출
+        }
+
+        if (Input.GetButtonDown("Jump"))
+        {
+            HandleGroundedMovement(false, true);
         }
     }
 
@@ -104,8 +111,8 @@ public class move : MonoBehaviour {
 
            moveDeirection = new Vector3(0, -0.2f, 0);
         }
-
-        crController.Move(moveDeirection);
+        rbody.velocity = moveDeirection;
+        //crController.Move(moveDeirection);
 
         /*
       inputH = Input.GetAxis("Horizontal");
@@ -152,4 +159,19 @@ public class move : MonoBehaviour {
         isAttackChk = false;
     }
     */
+
+    void HandleGroundedMovement(bool dodge, bool jump)
+    {
+        // check whether conditions are right to allow a jump:
+        if (jump && !dodge)
+        {
+            Debug.Log("jump");
+            // jump!
+            m_Jump = true;
+            rbody.velocity = new Vector3(rbody.velocity.x, jumpPower, rbody.velocity.z);
+            //rbody = false;
+            anim.applyRootMotion = false;
+            //m_GroundCheckDistance = 0.1f;
+        }
+    }
 }

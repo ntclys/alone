@@ -39,7 +39,7 @@ public class playerCharacter : MonoBehaviour {
     }
 
 
-    public void Move(Vector3 move, bool crouch, bool jump)
+    public void Move(Vector3 move, bool dodge, bool jump)
     {
 
         // convert the world relative moveInput vector into a local-relative
@@ -57,14 +57,14 @@ public class playerCharacter : MonoBehaviour {
         // control and velocity handling is different when grounded and airborne:
         if (m_IsGrounded)
         {
-            HandleGroundedMovement(crouch, jump);
+            HandleGroundedMovement(dodge, jump);
         }
         else
         {
             HandleAirborneMovement();
         }
 
-        ScaleCapsuleForCrouching(crouch);
+        ScaleCapsuleForCrouching(dodge);
         PreventStandingInLowHeadroom();
 
         // send input and other state parameters to the animator
