@@ -3,12 +3,12 @@
 
 [InitializeOnLoad]는 유니티 에디터가 실행됐을때 해당 클래스의 static 생성자를 한번 실행해 달라는 Attribute 입니다.
 
+FxMaker 
 
+[RuntimeInitializeOnLoadMethodAttribute]는 유니티 5에서 추가된 Attribute로 보입니다.
+이 Attribute를 사용하면 게임이 메모리에 Load되어 플레이되는 순간 딱 한번 해당 메소드를 호출해 줍니다. 그리고 Runtime 코드이기 때문에 빌드된 파일에서도 실행 가능합니다.
 
-
-
-//------------------------------------------------------------
-//유니티 최적화
+//------------------------------------------------------------//유니티 최적화
 
 http://vallista.tistory.com/entry/Unity-%EA%B2%8C%EC%9E%84-%EC%B5%9C%EC%A0%81%ED%99%94-%EA%B8%B0%EB%B2%95
 
