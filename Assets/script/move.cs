@@ -14,7 +14,6 @@ public class move : MonoBehaviour {
     public Transform target;
     public GameObject playerWeapon;
 
-    Vector3 m_GroundNormal;
     bool m_IsGrounded;
     float m_OrigGroundCheckDistance;
 
@@ -75,12 +74,16 @@ public class move : MonoBehaviour {
 
         //Debug.Log("test:" + Input.GetAxis("Horizontal"));
 
-        CheckGroundStatus();
+       
 
         if ( currentPlayereAni.IsName("Attack") == false)
         {
 
-            //rbody.velocity = Vector3.ProjectOnPlane(rbody.velocity, m_GroundNormal);
+            //Debug.Log("한글" + Mathf.Atan2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")) * Mathf.Rad2Deg);
+            //if(m_Jump)
+            {
+                CheckGroundStatus();
+            }
 
             if (Input.GetAxis("Vertical") != 0 || Input.GetAxis("Horizontal") != 0)
             {
@@ -108,7 +111,7 @@ public class move : MonoBehaviour {
 
             if (attackMoveOnece == true)
             {
-                //Invoke("playerAttackMoveOnce", 0.2f);
+                Invoke("playerAttackMoveOnce", 0.2f);
                 attackMoveOnece = false;
             }
         }
@@ -128,7 +131,7 @@ public class move : MonoBehaviour {
 
     private void playerAttackMoveOnce()
     {
-        //rbody.AddForce(this.transform.forward * walkSpeed * Time.deltaTime, ForceMode.Impulse);
+        rbody.AddForce(this.transform.forward * walkSpeed * Time.deltaTime, ForceMode.Impulse);
     }
 
     void HandleGroundedMovement(bool dodge, bool jump)
@@ -165,19 +168,22 @@ public class move : MonoBehaviour {
         // it is also good to note that the transform position in the sample assets is at the base of the character
         if (Physics.Raycast(transform.position + (Vector3.up * 0.1f), Vector3.down, out hitInfo, m_GroundCheckDistance))
         {
-            Debug.Log("jump_onGround"+hitInfo.distance);
-            m_GroundNormal = hitInfo.normal;
-            m_IsGrounded = true;
-            anim.applyRootMotion = true;
-            m_Jump = false;
-            anim.SetBool("isJump", false);
-            anim.SetTrigger("land");
+            Debug.Log("jump_onGround" + hitInfo.distance);
+
+            //if (m_Jump )
+            {                
+                m_IsGrounded = true;
+                anim.applyRootMotion = true;
+                m_Jump = false;
+                anim.SetBool("isJump", false);
+                anim.SetTrigger("land");
+            }
+            
         }
         else
         {
-            Debug.Log("jump_onAir:"+hitInfo.distance);
+            //Debug.Log("jump_onAir:"+hitInfo.distance);
             m_IsGrounded = false;
-            m_GroundNormal = Vector3.up;
             anim.applyRootMotion = false;
         }
     }
