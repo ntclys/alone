@@ -128,7 +128,7 @@ public class move : MonoBehaviour {
 
     private void playerAttackMoveOnce()
     {
-        rbody.AddForce(this.transform.forward * walkSpeed * Time.deltaTime, ForceMode.Impulse);
+        //rbody.AddForce(this.transform.forward * walkSpeed * Time.deltaTime, ForceMode.Impulse);
     }
 
     void HandleGroundedMovement(bool dodge, bool jump)

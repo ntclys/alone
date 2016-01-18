@@ -1291,7 +1291,7 @@ MonoBehaviour:
   target: {fileID: 0}
   playerWeapon: {fileID: 1063731306}
   walkSpeed: 10
-  jumpPower: 7
+  jumpPower: 10
   turnSpeed: 1.4
   gravity: 10
 --- !u!54 &1491883445
