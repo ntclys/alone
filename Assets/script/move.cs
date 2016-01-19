@@ -25,7 +25,7 @@ public class move : MonoBehaviour {
     private bool isAttackChk;
     private bool attackMoveOnece;
 
-    private bool m_Jump;
+    [SerializeField] private bool m_Jump;
 
     private float inputH;
     private float inputV;
@@ -72,19 +72,8 @@ public class move : MonoBehaviour {
     private void FixedUpdate()
     {
 
-        //Debug.Log("test:" + Input.GetAxis("Horizontal"));
-
-       
-
         if ( currentPlayereAni.IsName("Attack") == false)
         {
-
-            //Debug.Log("한글" + Mathf.Atan2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")) * Mathf.Rad2Deg);
-            //if(m_Jump)
-            {
-                CheckGroundStatus();
-            }
-
             if (Input.GetAxis("Vertical") != 0 || Input.GetAxis("Horizontal") != 0)
             {
                 anim.SetBool("isRun", true);
@@ -95,7 +84,6 @@ public class move : MonoBehaviour {
             {
                 anim.SetBool("isRun", false);
                 rbody.velocity = new Vector3(0, rbody.velocity.y, 0 );
-
             }
 
         }
@@ -141,7 +129,7 @@ public class move : MonoBehaviour {
         {
             // jump!
             Debug.Log("jump");
-            anim.SetFloat("Jump", rbody.velocity.y);
+            
             if (m_Jump == false)
             {
                 m_Jump = true;
@@ -150,42 +138,19 @@ public class move : MonoBehaviour {
                 rbody.velocity = new Vector3(rbody.velocity.x, jumpPower, rbody.velocity.z);
             }
             
-            //rbody = false;
-            //anim.applyRootMotion = false;
-            //m_GroundCheckDistance = 0.1f;
         }
     }
 
 
-    void CheckGroundStatus()
+    void OnCollisionStay()
     {
-        RaycastHit hitInfo;
-#if UNITY_EDITOR
-        // helper to visualise the ground check ray in the scene view
-        Debug.DrawLine(transform.position + (Vector3.up * 0.1f), transform.position + (Vector3.up * 0.1f) + (Vector3.down * m_GroundCheckDistance));
-#endif
-        // 0.1f is a small offset to start the ray from inside the character
-        // it is also good to note that the transform position in the sample assets is at the base of the character
-        if (Physics.Raycast(transform.position + (Vector3.up * 0.1f), Vector3.down, out hitInfo, m_GroundCheckDistance))
+        if(m_Jump)
         {
-            Debug.Log("jump_onGround" + hitInfo.distance);
-
-            //if (m_Jump )
-            {                
-                m_IsGrounded = true;
-                anim.applyRootMotion = true;
-                m_Jump = false;
-                anim.SetBool("isJump", false);
-                anim.SetTrigger("land");
-            }
-            
+            m_Jump = false;
+            anim.SetBool("isJump", false);
+            //anim.SetTrigger("land");
         }
-        else
-        {
-            //Debug.Log("jump_onAir:"+hitInfo.distance);
-            m_IsGrounded = false;
-            anim.applyRootMotion = false;
-        }
+        
     }
 
 
