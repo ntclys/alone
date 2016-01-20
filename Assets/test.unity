@@ -603,6 +603,10 @@ Prefab:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 100092, guid: c96d0806f3dd8a0488194e1c6c383550, type: 3}
+      propertyPath: m_Name
+      value: Player
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 9500000, guid: c96d0806f3dd8a0488194e1c6c383550, type: 3}
   m_ParentPrefab: {fileID: 100100000, guid: c96d0806f3dd8a0488194e1c6c383550, type: 3}
@@ -1216,6 +1220,10 @@ Prefab:
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: 02daca6dc6227cd42b464877f9282894, type: 2}
+    - target: {fileID: 100096, guid: 26efeb3067295464390d27d6df3c705c, type: 3}
+      propertyPath: m_Name
+      value: EnemyJombi
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 26efeb3067295464390d27d6df3c705c, type: 3}
   m_IsPrefabParent: 0
@@ -1313,6 +1321,7 @@ MonoBehaviour:
   jumpPower: 7
   turnSpeed: 1.4
   gravity: 10
+  m_Jump: 0
 --- !u!54 &1491883445
 Rigidbody:
   m_ObjectHideFlags: 0

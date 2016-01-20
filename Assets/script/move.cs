@@ -14,8 +14,6 @@ public class move : MonoBehaviour {
     public Transform target;
     public GameObject playerWeapon;
 
-    bool m_IsGrounded;
-    float m_OrigGroundCheckDistance;
 
     public float walkSpeed;
     public float jumpPower = 3.5f;
@@ -26,9 +24,15 @@ public class move : MonoBehaviour {
     private bool attackMoveOnece;
 
     [SerializeField] private bool m_Jump;
+    [SerializeField] private float m_MaxAngularVelocity = 25; // The maximum velocity the ball can rotate at.
 
-    private float inputH;
-    private float inputV;
+
+    private Vector3 movePlayer;
+    // the world-relative desired move direction, calculated from the camForward and user input.
+
+    private Transform cam; // A reference to the main camera in the scenes transform
+    private Vector3 camForward; // The current forward direction of the camera
+    private bool jump; // whether the jump button is currently pressed
 
 
     enum PlayerState
@@ -36,16 +40,33 @@ public class move : MonoBehaviour {
         Idle,
         Move
     };
+
+    private void Awake()
+    {
+        // get the transform of the main camera
+        if (Camera.main != null)
+        {
+            cam = Camera.main.transform;
+        }
+        else
+        {
+            Debug.LogWarning(
+                "Warning: no main camera found. Ball needs a Camera tagged \"MainCamera\", for camera-relative controls.");
+            // we use world-relative controls in this case, which may not be what the user wants, but hey, we warned them!
+        }
+    }
+
     // Use this for initialization
     void Start()
     {
         anim = GetComponent<Animator>();
         rbody = GetComponent<Rigidbody>();
+
+        GetComponent<Rigidbody>().maxAngularVelocity = m_MaxAngularVelocity;
         playerWeaponCol = playerWeapon.GetComponent<Collider>();
 
         isAttackChk = false;
         attackMoveOnece = false;
-        m_OrigGroundCheckDistance = m_GroundCheckDistance;
     }
 
     private void Update()
@@ -77,8 +98,26 @@ public class move : MonoBehaviour {
             if (Input.GetAxis("Vertical") != 0 || Input.GetAxis("Horizontal") != 0)
             {
                 anim.SetBool("isRun", true);
-                transform.eulerAngles = new Vector3(transform.eulerAngles.x, Mathf.Atan2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")) * Mathf.Rad2Deg, transform.eulerAngles.z);
-                rbody.AddForce(this.transform.forward * walkSpeed *Time.deltaTime, ForceMode.Impulse);
+                //transform.eulerAngles = new Vector3(transform.eulerAngles.x, Mathf.Atan2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")) * Mathf.Rad2Deg, transform.eulerAngles.z);
+                //rbody.AddForce(this.transform.forward * walkSpeed *Time.deltaTime, ForceMode.Impulse);
+
+                float h = CrossPlatformInputManager.GetAxis("Horizontal");
+                float v = CrossPlatformInputManager.GetAxis("Vertical");
+
+                // calculate move direction
+                if (cam != null)
+                {
+                    // calculate camera relative direction to move:
+                    camForward = Vector3.Scale(cam.forward, new Vector3(1, 0, 1)).normalized;
+                    movePlayer = (v * camForward + h * cam.right).normalized;
+                }
+                else
+                {
+                    // we use world-relative directions in the case of no main camera
+                    movePlayer = (v * Vector3.forward + h * Vector3.right).normalized;
+                }
+                //rbody.AddTorque(new Vector3(movePlayer.z, 0, -movePlayer.x) * walkSpeed);
+                rbody.AddForce(movePlayer * walkSpeed);
             }
             else
             {
