@@ -20,21 +20,17 @@ public class move : MonoBehaviour {
     public float turnSpeed = 10.0f;
     public float gravity = 10.0f;
     private float offsetAngles = 0.0f;
+    private float currentRotation = 0.0f;
+    private float courseNum = 0.0f;
 
     private bool isAttackChk;
     private bool attackMoveOnece;
-
-
-    [SerializeField] private bool m_Jump;
-    [SerializeField] private float m_MaxAngularVelocity = 25; // The maximum velocity the ball can rotate at.
 
 
     private Vector3 movePlayer;
     // the world-relative desired move direction, calculated from the camForward and user input.
 
     private Transform cam; // A reference to the main camera in the scenes transform
-    private Vector3 camForward; // The current forward direction of the camera
-    private bool jump; // whether the jump button is currently pressed
 
 
     enum PlayerState
@@ -64,8 +60,6 @@ public class move : MonoBehaviour {
         anim = GetComponent<Animator>();
         rbody = GetComponent<Rigidbody>();
         charController = GetComponent<CharacterController>();
-
-        GetComponent<Rigidbody>().maxAngularVelocity = m_MaxAngularVelocity;
         playerWeaponCol = playerWeapon.GetComponent<Collider>();
 
         isAttackChk = false;
@@ -76,13 +70,15 @@ public class move : MonoBehaviour {
     {
         currentPlayereAni = anim.GetCurrentAnimatorStateInfo(0);
 
-        if (Input.GetMouseButtonDown(0) && currentPlayereAni.IsName("Attack") == false)
+        if (Input.GetMouseButtonDown(0) && currentPlayereAni.IsName("Attack") == false && charController.isGrounded)
         {
             isAttackChk = true;
             attackMoveOnece = true;
             anim.SetTrigger("Attack");
             anim.SetBool("isRun", false);
             playerWeaponCol.enabled = true;
+
+            //currentRotation = target.transform.eulerAngles.y;
 
             //Invoke("endAttackAni", 0.1f);  //일정시간후 관련함수 호출
         }
@@ -96,124 +92,170 @@ public class move : MonoBehaviour {
     private void FixedUpdate()
     {
 
-        if ( currentPlayereAni.IsName("Attack") == false)
+        if (charController.isGrounded == true)
         {
-            if (Input.GetAxis("Vertical") != 0 || Input.GetAxis("Horizontal") != 0)
+            if (currentPlayereAni.IsName("Attack") == false)
             {
-                anim.SetBool("isRun", true);
-                //transform.eulerAngles = new Vector3(transform.eulerAngles.x, Mathf.Atan2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")) * Mathf.Rad2Deg, transform.eulerAngles.z);
-                //rbody.AddForce(this.transform.forward * walkSpeed *Time.deltaTime, ForceMode.Impulse);
-
-
-
-                if (CrossPlatformInputManager.GetAxis("Vertical") > .1)
+                if (Input.GetAxis("Vertical") != 0 || Input.GetAxis("Horizontal") != 0)
                 {
+                    anim.SetBool("isRun", true);
+                    //transform.eulerAngles = new Vector3(transform.eulerAngles.x, Mathf.Atan2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")) * Mathf.Rad2Deg, transform.eulerAngles.z);
+                    //rbody.AddForce(this.transform.forward * walkSpeed *Time.deltaTime, ForceMode.Impulse);
 
-                    offsetAngles = 0;
 
-                    if (CrossPlatformInputManager.GetAxis("Horizontal") > .1)
-                    {
-                        offsetAngles += 45;
-                    }
-                    else if (CrossPlatformInputManager.GetAxis("Horizontal") < -.1)
-                    {
-                        offsetAngles -= 45;
-                    }
-                    movePlayer = new Vector3(0, movePlayer.y, CrossPlatformInputManager.GetAxis("Vertical"));
-                }
-                else if (CrossPlatformInputManager.GetAxis("Vertical") < -.1)
-                {
-
-                    offsetAngles = 180;
-
-                    if (CrossPlatformInputManager.GetAxis("Horizontal") > .1)
-                    {
-                        offsetAngles -= 45;
-                    }
-                    else if (CrossPlatformInputManager.GetAxis("Horizontal") < -.1)
-                    {
-                        offsetAngles += 45;
-                    }
-
-                    movePlayer = new Vector3(0, movePlayer.y, -CrossPlatformInputManager.GetAxis("Vertical"));
-                }
-                else if (CrossPlatformInputManager.GetAxis("Horizontal") > .1)
-                {
-                    offsetAngles = 90;
 
                     if (CrossPlatformInputManager.GetAxis("Vertical") > .1)
                     {
-                        offsetAngles += 45;
+
+                        offsetAngles = 0;
+
+                        if (CrossPlatformInputManager.GetAxis("Horizontal") > .1)
+                        {
+                            offsetAngles += 45;
+                        }
+                        else if (CrossPlatformInputManager.GetAxis("Horizontal") < -.1)
+                        {
+                            offsetAngles -= 45;
+                        }
+                        movePlayer = new Vector3(0, movePlayer.y, CrossPlatformInputManager.GetAxis("Vertical"));
                     }
                     else if (CrossPlatformInputManager.GetAxis("Vertical") < -.1)
                     {
-                        offsetAngles -= 45;
+
+                        offsetAngles = 180;
+
+                        if (CrossPlatformInputManager.GetAxis("Horizontal") > .1)
+                        {
+                            offsetAngles -= 45;
+                        }
+                        else if (CrossPlatformInputManager.GetAxis("Horizontal") < -.1)
+                        {
+                            offsetAngles += 45;
+                        }
+
+                        movePlayer = new Vector3(0, movePlayer.y, -CrossPlatformInputManager.GetAxis("Vertical"));
                     }
-                    
-                    movePlayer = new Vector3(0, movePlayer.y, CrossPlatformInputManager.GetAxis("Horizontal"));
-                }
-                else if (CrossPlatformInputManager.GetAxis("Horizontal") < -.1)
-                {
-
-                    offsetAngles = 270;
-
-                    if (CrossPlatformInputManager.GetAxis("Vertical") > .1)
+                    else if (CrossPlatformInputManager.GetAxis("Horizontal") > .1)
                     {
-                        offsetAngles += 45;
+                        offsetAngles = 90;
+
+                        if (CrossPlatformInputManager.GetAxis("Vertical") > .1)
+                        {
+                            offsetAngles += 45;
+                        }
+                        else if (CrossPlatformInputManager.GetAxis("Vertical") < -.1)
+                        {
+                            offsetAngles -= 45;
+                        }
+
+                        movePlayer = new Vector3(0, movePlayer.y, CrossPlatformInputManager.GetAxis("Horizontal"));
                     }
-                    else if (CrossPlatformInputManager.GetAxis("Vertical") < -.1)
+                    else if (CrossPlatformInputManager.GetAxis("Horizontal") < -.1)
                     {
-                        offsetAngles -= 45;
+
+                        offsetAngles = 270;
+
+                        if (CrossPlatformInputManager.GetAxis("Vertical") > .1)
+                        {
+                            offsetAngles += 45;
+                        }
+                        else if (CrossPlatformInputManager.GetAxis("Vertical") < -.1)
+                        {
+                            offsetAngles -= 45;
+                        }
+
+                        movePlayer = new Vector3(0, movePlayer.y, -CrossPlatformInputManager.GetAxis("Horizontal"));
                     }
 
-                    movePlayer = new Vector3(0, movePlayer.y, -CrossPlatformInputManager.GetAxis("Horizontal"));
-                }
-
-                // calculate move direction
-                /*
-                if (cam != null)
-                {
-                    // calculate camera relative direction to move:
-                    camForward = Vector3.Scale(cam.forward, new Vector3(1, 0, 1)).normalized;
-                    movePlayer = (v * camForward + h * cam.right).normalized;
+                    transform.eulerAngles = new Vector3(0, cam.transform.eulerAngles.y + offsetAngles, 0);
                 }
                 else
                 {
-                    // we use world-relative directions in the case of no main camera
-                    movePlayer = (v * Vector3.forward + h * Vector3.right).normalized;
-                }
-                */
-                transform.eulerAngles = new Vector3(0, cam.transform.eulerAngles.y + offsetAngles, 0);
-                //transform.eulerAngles = new Vector3(0, offsetAngles, 0);
-
-                movePlayer = transform.TransformDirection(movePlayer);
-                rbody.velocity += movePlayer * Time.deltaTime *walkSpeed ; 
-                //rbody.AddForce(movePlayer * walkSpeed);
+                    anim.SetBool("isRun", false);
+                    rbody.velocity = new Vector3(0, rbody.velocity.y, 0);
+                }               
 
             }
             else
             {
-                anim.SetBool("isRun", false);
-                rbody.velocity = new Vector3(0, rbody.velocity.y, 0 );
+                currentPlayereAni = anim.GetCurrentAnimatorStateInfo(0);
+
+                if (currentPlayereAni.normalizedTime > 0.5f)
+                {
+                    playerWeaponCol.enabled = false;
+                }
+
+
+                if (attackMoveOnece == true)
+                {
+                    Invoke("playerAttackMoveOnce", 0.2f);
+                    attackMoveOnece = false;
+                }
             }
 
+            movePlayer = transform.TransformDirection(movePlayer);
+            movePlayer.y -= gravity * Time.deltaTime;
+            charController.Move(movePlayer * (Time.deltaTime * walkSpeed));
         }
         else
         {
-            currentPlayereAni = anim.GetCurrentAnimatorStateInfo(0);
 
-            if (currentPlayereAni.normalizedTime > 0.5f)
-            {
-                playerWeaponCol.enabled = false;
-            }
-  
 
-            if (attackMoveOnece == true)
+            if (Input.GetAxis("Vertical") > .1)
             {
-                Invoke("playerAttackMoveOnce", 0.2f);
-                attackMoveOnece = false;
+                offsetAngles = 0;
+
+                if (Input.GetAxis("Horizontal") > .1)
+                {
+                    offsetAngles += 45;
+                }
+                else if (Input.GetAxis("Horizontal") < -.1)
+                {
+                    offsetAngles -= 45;
+                }
+
+                currentRotation += offsetAngles;
+                courseNum = Input.GetAxis("Vertical");
             }
+            else if (Input.GetAxis("Vertical") < -.1)
+            {
+                offsetAngles = 180;
+
+                if (Input.GetAxis("Horizontal") > .1)
+                {
+                    offsetAngles -= 45;
+                }
+                else if (Input.GetAxis("Horizontal") < -.1)
+                {
+                    offsetAngles += 45;
+                }
+
+                currentRotation +=  offsetAngles;
+                courseNum = -Input.GetAxis("Vertical");
+            }
+            else if (Input.GetAxis("Horizontal") > .1)
+            {
+                currentRotation  += 90;
+                courseNum = movePlayer.z + Input.GetAxis("Horizontal");
+            }
+            else if (Input.GetAxis("Horizontal") < -.1)
+            {
+                currentRotation += 270;
+                courseNum = -Input.GetAxis("Horizontal");
+            }
+            else
+            {
+                movePlayer.y += 0.03f;
+            }
+
+            transform.eulerAngles = new Vector3(0, currentRotation, 0);
+            movePlayer = new Vector3(0, movePlayer.y, courseNum);
+
         }
+
+        movePlayer = transform.TransformDirection(movePlayer);
+        movePlayer.y -= gravity * Time.deltaTime;
+        charController.Move(movePlayer * (Time.deltaTime * walkSpeed));
     }
 
 
@@ -241,28 +283,18 @@ public class move : MonoBehaviour {
             // jump!
             Debug.Log("jump");
             
-            if (m_Jump == false)
+            if (charController.isGrounded )
             {
-                m_Jump = true;
                 anim.SetTrigger("jump");
                 anim.applyRootMotion = false;
-                rbody.velocity = new Vector3(rbody.velocity.x, jumpPower, rbody.velocity.z);
+                currentRotation = cam.transform.eulerAngles.y;
+                //rbody.velocity = new Vector3(rbody.velocity.x, jumpPower, rbody.velocity.z);
+                movePlayer.y = jumpPower;
             }
             
         }
     }
 
-
-    void OnCollisionStay()
-    {
-        if(m_Jump)
-        {
-            m_Jump = false;
-            anim.SetBool("isJump", false);
-            //anim.SetTrigger("land");
-        }
-        
-    }
 
 
     /*

@@ -553,7 +553,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400092, guid: c96d0806f3dd8a0488194e1c6c383550, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.3
+      value: 1.3
       objectReference: {fileID: 0}
     - target: {fileID: 400092, guid: c96d0806f3dd8a0488194e1c6c383550, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1316,11 +1316,9 @@ MonoBehaviour:
   target: {fileID: 0}
   playerWeapon: {fileID: 1063731306}
   walkSpeed: 9.56
-  jumpPower: 7
+  jumpPower: 3
   turnSpeed: 1.4
   gravity: 10
-  m_Jump: 0
-  m_MaxAngularVelocity: 25
 --- !u!143 &1491883444
 CharacterController:
   m_ObjectHideFlags: 0
@@ -1329,15 +1327,15 @@ CharacterController:
   m_GameObject: {fileID: 1491883442}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 2
-  m_Height: 2
-  m_Radius: 0.5
+  m_Height: 2.37
+  m_Radius: 0.55
   m_SlopeLimit: 45
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0, y: 1.22, z: 0.27}
 --- !u!54 &1491883445
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1348,7 +1346,7 @@ Rigidbody:
   m_Mass: 2
   m_Drag: 0
   m_AngularDrag: 136.6
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 112
@@ -1370,19 +1368,6 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
---- !u!136 &1491883447
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1491883442}
-  m_Material: {fileID: 13400000, guid: 3aeb7dadc0c69d54d9e5777e9d5631f1, type: 2}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.64
-  m_Height: 2.27
-  m_Direction: 1
-  m_Center: {x: 0, y: 1.12, z: 0}
 --- !u!4 &1491883448 stripped
 Transform:
   m_PrefabParentObject: {fileID: 400092, guid: c96d0806f3dd8a0488194e1c6c383550, type: 3}
