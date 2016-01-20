@@ -1313,15 +1313,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcfb8e4d9a84571418a3d070a11f1772, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_GravityMultiplier: 2
-  m_GroundCheckDistance: 0.11
   target: {fileID: 0}
   playerWeapon: {fileID: 1063731306}
-  walkSpeed: 10
+  walkSpeed: 9.56
   jumpPower: 7
   turnSpeed: 1.4
   gravity: 10
   m_Jump: 0
+  m_MaxAngularVelocity: 25
+--- !u!143 &1491883444
+CharacterController:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1491883442}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 0
+  serializedVersion: 2
+  m_Height: 2
+  m_Radius: 0.5
+  m_SlopeLimit: 45
+  m_StepOffset: 0.3
+  m_SkinWidth: 0.08
+  m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &1491883445
 Rigidbody:
   m_ObjectHideFlags: 0
