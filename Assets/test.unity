@@ -553,7 +553,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400092, guid: c96d0806f3dd8a0488194e1c6c383550, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.3
+      value: 0.96
       objectReference: {fileID: 0}
     - target: {fileID: 400092, guid: c96d0806f3dd8a0488194e1c6c383550, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1315,12 +1315,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 0}
   playerWeapon: {fileID: 1063731306}
-  walkSpeed: 9.56
-  jumpPower: 3
+  walkSpeed: 10
+  jumpPower: 8
   turnSpeed: 1.4
   gravity: 10
---- !u!143 &1491883444
-CharacterController:
+  m_Jump: 0
+  m_MaxAngularVelocity: 1
+--- !u!136 &1491883444
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
@@ -1328,14 +1330,10 @@ CharacterController:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Height: 2.37
-  m_Radius: 0.55
-  m_SlopeLimit: 45
-  m_StepOffset: 0.3
-  m_SkinWidth: 0.08
-  m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 1.22, z: 0.27}
+  m_Radius: 0.68
+  m_Height: 2.26
+  m_Direction: 1
+  m_Center: {x: -0.05, y: 1.16, z: 0.27}
 --- !u!54 &1491883445
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1346,7 +1344,7 @@ Rigidbody:
   m_Mass: 2
   m_Drag: 0
   m_AngularDrag: 136.6
-  m_UseGravity: 0
+  m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 112
