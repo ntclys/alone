@@ -73,15 +73,35 @@ public class move : MonoBehaviour {
     {
         currentPlayereAni = anim.GetCurrentAnimatorStateInfo(0);
 
-        if (Input.GetMouseButtonDown(0) && currentPlayereAni.IsName("Attack") == false && m_Jump ==  false)
+        if (Input.GetMouseButtonDown(0) && m_Jump == false )
         {
-            isAttackChk = true;
-            attackMoveOnece = true;
-            anim.SetTrigger("Attack");
-            anim.SetBool("isRun", false);
-            playerWeaponCol.enabled = true;
+            //Debug.Log("state:"+ currentPlayereAni);
+            if (currentPlayereAni.IsName("Attack") == false )
+            {
+                isAttackChk = true;
+                attackMoveOnece = true;
+                anim.SetTrigger("Attack");
+                anim.SetBool("isRun", false);
+                playerWeaponCol.enabled = true;
 
-            //Invoke("endAttackAni", 0.1f);  //일정시간후 관련함수 호출
+                //Invoke("endAttackAni", 0.1f);  //일정시간후 관련함수 호출
+            }
+            else if ( currentPlayereAni.IsName("Attack") == true)
+            {
+                Debug.Log("Combo1:");
+                if (currentPlayereAni.normalizedTime > 0.3f)
+                {
+                    anim.SetTrigger("Combo1");
+                }
+            }
+            else if (currentPlayereAni.IsName("Combo1") == true)
+            {
+                Debug.Log("Combo2");
+                if (currentPlayereAni.normalizedTime > 0.3f)
+                {
+                    anim.SetTrigger("Combo2");
+                }
+            }
         }
 
         if (Input.GetButtonDown("Jump"))
